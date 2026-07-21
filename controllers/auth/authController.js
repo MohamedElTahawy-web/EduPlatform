@@ -18,14 +18,16 @@ const signToken = (id) => {
 const createSendToken = (user, statusCode, res) => {
     const token = signToken(user._id);
 
-    user.password = undefined;
-    user.confirmPassword = undefined;
-
     res.status(statusCode).json({
         status: 'success',
         token,
         data: {
-            user
+            user: {
+                name: user.name,
+                fullname: user.fullname,
+                phone: user.phone,
+                grade: user.grade,
+            }
         }
     });
 };

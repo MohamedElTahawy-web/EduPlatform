@@ -10,18 +10,24 @@ const userSchema = new mongoose.Schema(
             trim: true,
         },
 
-        familyName: {
+        fullname: {
             type: String,
-            required: [true, 'Please provide your family name'],
+            required: [true, 'Please provide your full name'],
             trim: true,
         },
 
         email: {
             type: String,
-            required: [true, 'Please provide your email'],
+            required: false,
             unique: true,
+            sparse: true,
             lowercase: true,
-            validate: [validator.isEmail, 'Please provide a valid email'],
+            validate: {
+                validator: function(v) {
+                    return !v || validator.isEmail(v);
+                },
+                message: 'Please provide a valid email'
+            }
         },
 
         phone: {
@@ -35,14 +41,9 @@ const userSchema = new mongoose.Schema(
             ],
         },
 
-        academicYear: {
+        grade: {
             type: String,
-            required: [true, 'Please provide your academic year'],
-            enum: [
-                'الصف الاول الثانوي',
-                'الصف الثاني الثانوي',
-                'الصف الثالث الثانوي',
-            ],
+            required: [true, 'Please provide your grade'],
         },
 
         role: {

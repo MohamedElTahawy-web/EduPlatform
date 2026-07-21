@@ -36,19 +36,23 @@ exports.signup = catchAsync(async (req, res, next) => {
 });
 
 exports.login = catchAsync(async (req, res, next) => {
-const { phone, password } = req.body;
+    console.log("LOGIN START");
 
-if (!phone || !password) {
-    return next(new ApiError('Please provide phone and password', 400));
-}
+    const { phone, password } = req.body;
 
-const user = await User.findOne({ phone }).select('+password');
+    console.log("PHONE:", phone);
 
-if (!user || !(await user.correctPassword(password, user.password))) {
-    return next(new ApiError('Incorrect phone number or password', 401));
-}
+    const user = await User.findOne({ phone }).select('+password');
 
-createSendToken(user, 200, res);
+    console.log("USER:", user);
+
+    if (!user || !(await user.correctPassword(password, user.password))) {
+        return next(new ApiError('Incorrect phone number or password', 401));
+    }
+
+    console.log("PASSWORD OK");
+
+    createSendToken(user, 200, res);
 });
 
 exports.logout = (req, res) => {
